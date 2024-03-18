@@ -61,8 +61,44 @@ char *where(char *argc,int len){
 }
 
 /* kullanıcı inputunu çift tırnakları da göze alarak parçalara ayırır ve array olarak döndürür */
-split(){
+char **split(char *str, char *tokens[]) {
+    int i = 0;
+    int quotes = 0; // çift tırnak olması durumunda kullanacağımız flag
+    char *start = str;
 
+    while (*str) {
+        if (*str == '"') {
+            quotes = !quotes;
+            if (!quotes) {
+                *str = '\0';
+                // çift tırnak var ise çift tırnak içindeki ifadeyi token olarak al
+                start++;
+                if (start != str) {
+                    tokens[i] = start;
+                    i++;
+                }
+                start = str + 1; // çift tırnaklı ifadelerden sonra yeni tokene geçer
+            }
+        } else if (!quotes && (*str == ' ' || *str == '\t' || *str == '\n')) {
+        
+            *str = '\0';
+            if (start != str) {
+                tokens[i] = start;
+                i++;
+            }
+            start = str + 1; // yeni tokene geçer
+        }
+        str++;
+    }
+
+    // dizide space'den sonra kalan bir şey olduysa token olarak alır
+    if (start != str) {
+        tokens[i] = start;
+        i++;
+    }
+
+    tokens[i] = NULL; 
+    return tokens;
 }
 
 /* COMMENT */
@@ -77,10 +113,14 @@ int main(int argv, char *argc[]){
 
     write(1,"$",1);
     read(0,newargc,256);
-    char *inp[]=split();
+    char **inp=split(newargc,tokens);
+  // Print the tokens after split func
+  printf("Tokens after split:\n");
+  for (int i = 0; inp[i] != NULL; i++) {
+    printf("-%s\n", inp[i]);
+  }
 
-
-    char *path=where(inp[0],256);
+    char *path=where(*inp,256);
     printf("\npath=%s\n",path);
     execute(path,inp);
 
