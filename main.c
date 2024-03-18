@@ -114,6 +114,7 @@ int main(int argv, char *argc[]){
     write(1,"$",1);
     read(0,newargc,256);
     char **inp=split(newargc,tokens);
+    
   // Print the tokens after split func
   printf("Tokens after split:\n");
   for (int i = 0; inp[i] != NULL; i++) {
