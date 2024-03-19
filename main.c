@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/types.h>
 #include <math.h>
 #define true 1
 #define false 0
@@ -132,7 +133,7 @@ int execute(char *path,char **inp){
         exit(1);
 
     } else {
-        wait(&status);
+        waitpid(pid, &status, 0); 
         return status;
     }
 }
@@ -142,7 +143,7 @@ int execute(char *path,char **inp){
 int main(int argv, char *argc[]){
     
     char *newargc=malloc(sizeof(char)*256);
-    int status;
+    int status,statuinfo;
     char **inp;
     char **tokens=malloc(sizeof(char)*256*256);
     char *path;
@@ -188,14 +189,17 @@ int main(int argv, char *argc[]){
             }
         }
 
-        status=execute(path,inp);
-        returnd=malloc(snprintf(NULL, 0,"%d",status)); /* stack overflowdan alıntı */
-        sprintf(returnd, "%d", status); /* stack overflowdan alıntı */
-
-        if(!(status==0)){
-            write(STDOUT_FILENO,"There was an error while executing your command. \nreturn value:",63);
-            write(STDOUT_FILENO, returnd,strlen(returnd));
-            write(STDOUT_FILENO,"\n",1);
+        /* uygulama hata vererek kapandıysa hata kodunu printle */
+        statuinfo=execute(path,inp);
+        if ( WIFEXITED(statuinfo) ) {
+            status = WEXITSTATUS(statuinfo);
+            returnd=malloc(sizeof(char)*snprintf(NULL, 0,"%d",status)+1); /* stack overflowdan alıntı */
+            sprintf(returnd, "%d", status); /* stack overflowdan alıntı */
+            if(!(status==0)){
+                write(STDOUT_FILENO,"There was an error while executing your command. \nreturn value:",63);
+                write(STDOUT_FILENO, returnd,strlen(returnd));
+                write(STDOUT_FILENO,"\n",1);
+            }
         }
     }
 }
