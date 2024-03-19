@@ -3,6 +3,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <math.h>
+#define true 1
+#define false 0
 
 
 /* hata mesajını printler ve proccessi kapatır */
@@ -26,18 +29,14 @@ char *where(char *argc,int len){
 
     char buffer[256]={0};
     int link[2];
-
     argc[find_nextline(argc,len)]=0;
 
-    if(pipe(link)== -1){
+    if(pipe(link)== -1)
         errorprint("There was a problem with pipe");
-    }
+    
     pid_t pid = fork();
-
-
-    if(pid == -1){
+    if(pid == -1)
         errorprint("There was a problem with fork");    
-    }
 
     if (pid == 0) {
         dup2 (link[1], STDOUT_FILENO);
@@ -50,12 +49,17 @@ char *where(char *argc,int len){
         close(link[1]);
         read(link[0], buffer, sizeof(buffer));
 
-        int nextln=find_nextline(buffer,sizeof(buffer));
+        int nextln=find_nextline(buffer,256);
         char *path=malloc(nextln + 1);
         strcpy(path,buffer);
-        path[nextln]='\0';
+        path[nextln]=0;
 
         wait(NULL);
+
+        if(path[0]==0){
+            return NULL;
+        }
+
         return path;
     }
 }
@@ -97,32 +101,77 @@ char **split(char *str, char *tokens[]) {
         i++;
     }
 
-    tokens[i] = NULL; 
+    tokens[i] = NULL;
+
     return tokens;
 }
 
 /* COMMENT */
-execute(){
+int execute(char *path,char **inp){
+    int status;
+
+    pid_t pid = fork();
+    if(pid == -1)
+        errorprint("There was a problem with fork");    
+
+    if (pid == 0) {
+        execvp(path, inp);
+        exit(1);
+
+    } else {
+        wait(&status);
+        return status;
+    }
 
 }
+
 
 /* COMMENT */
 int main(int argv, char *argc[]){
     
     char *newargc=malloc(sizeof(char)*256);
+    int status;
+    char *statusstr;
+    char **inp;
+    char tokens[256][256]={0};
+    char *path;
+    char *returnd;
 
-    write(1,"$",1);
-    read(0,newargc,256);
-    char **inp=split(newargc,tokens);
-  // Print the tokens after split func
-  printf("Tokens after split:\n");
-  for (int i = 0; inp[i] != NULL; i++) {
-    printf("-%s\n", inp[i]);
-  }
+    while(true){
 
-    char *path=where(*inp,256);
-    printf("\npath=%s\n",path);
-    execute(path,inp);
+        for(int i=0;i<256;i++){
+            newargc[i]=0;
+        }
+
+
+        write(1,"$",1);
+        read(0,newargc,256);
+        inp=split(newargc,tokens);
+        path=where(inp[0],256);
+
+        /* input exit için kontrol edilir */
+        if(!strcmp(inp[0],"exit")){
+            if (inp[1]==NULL){
+                exit(0);
+            }
+            continue;
+        }
+
+        if(!path){
+            write(STDOUT_FILENO,"No such command could be found. Check your environment variables\n",65);
+            continue;
+        }
+
+        status=execute(path,inp);
+        returnd=malloc(snprintf(NULL, 0,"%d",status)); /* stack overflowdan alıntı */
+        sprintf(returnd, "%d", status); /* stack overflowdan alıntı */
+
+        if(!(status==0)){
+            write(STDOUT_FILENO,"There was an error while executing your command. \n Returned:",60);
+            write(STDOUT_FILENO, returnd,strlen(returnd));
+            write(STDOUT_FILENO,"\n",1);
+        }
+    }
 
     free(path);
 
