@@ -20,7 +20,7 @@ jobs:
       with:
         test-name: basic test
         setup-command: cd tests
-        command: bash test.sh
+        command: bash testexit.sh
         timeout: 1
         max-score: 20
     - name: Autograding Reporter
