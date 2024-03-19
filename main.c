@@ -125,13 +125,11 @@ int execute(char *path,char **inp){
 
 }
 
-
 /* COMMENT */
 int main(int argv, char *argc[]){
     
     char *newargc=malloc(sizeof(char)*256);
     int status;
-    char *statusstr;
     char **inp;
     char tokens[256][256]={0};
     char *path;
@@ -146,7 +144,7 @@ int main(int argv, char *argc[]){
 
         write(1,"$",1);
         read(0,newargc,256);
-        inp=split(newargc,tokens);
+        inp=split(newargc,(char **)tokens);
         path=where(inp[0],256);
 
         /* input exit için kontrol edilir */
@@ -167,7 +165,7 @@ int main(int argv, char *argc[]){
         sprintf(returnd, "%d", status); /* stack overflowdan alıntı */
 
         if(!(status==0)){
-            write(STDOUT_FILENO,"There was an error while executing your command. \n Returned:",60);
+            write(STDOUT_FILENO,"There was an error while executing your command. \nreturn value:",63);
             write(STDOUT_FILENO, returnd,strlen(returnd));
             write(STDOUT_FILENO,"\n",1);
         }
