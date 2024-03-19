@@ -19,8 +19,8 @@ jobs:
       uses: education/autograding-command-grader@v1
       with:
         test-name: basic test
-        setup-command: cd tests
-        command: bash testexit.sh
+        setup-command: ''
+        command: cd tests & make & bash testexit.sh
         timeout: 1
         max-score: 20
     - name: Autograding Reporter
