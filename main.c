@@ -7,6 +7,17 @@
 #define true 1
 #define false 0
 
+/* 
+Alıntı Yapılan Yerler:
+https://stackoverflow.com/questions/8257714/how-can-i-convert-an-int-to-a-string-in-c
+https://stackoverflow.com/questions/7292642/grabbing-output-from-exec
+
+
+ */
+
+
+
+
 
 /* hata mesajını printler ve proccessi kapatır */
 int errorprint(char *str){
@@ -25,7 +36,9 @@ int find_nextline(char *str, int len){
 }
 
 /* COMMENT */
+/* bu fonksiyonda stackoverflowdan alıntı yaptım. sayfanın linki dosyanın tepesindeki yorum */
 char *where(char *argc,int len){
+
 
     char buffer[256]={0};
     int link[2];
@@ -122,8 +135,8 @@ int execute(char *path,char **inp){
         wait(&status);
         return status;
     }
-
 }
+
 
 /* COMMENT */
 int main(int argv, char *argc[]){
@@ -131,16 +144,17 @@ int main(int argv, char *argc[]){
     char *newargc=malloc(sizeof(char)*256);
     int status;
     char **inp;
-    char tokens[256][256]={0};
+    char **tokens=malloc(sizeof(char)*256*256);
     char *path;
-    char *returnd;
+    char *returnd=NULL;
+    char temp[256]="./";
+    temp[2]=0;
 
     while(true){
 
         for(int i=0;i<256;i++){
             newargc[i]=0;
         }
-
 
         write(1,"$",1);
         read(0,newargc,256);
@@ -150,14 +164,28 @@ int main(int argv, char *argc[]){
         /* input exit için kontrol edilir */
         if(!strcmp(inp[0],"exit")){
             if (inp[1]==NULL){
+                if(returnd){
+                    free(returnd);
+                }
+                if(path){
+                    free(path);
+                }
+                free(tokens);
+                free(newargc);
                 exit(0);
             }
             continue;
         }
 
         if(!path){
-            write(STDOUT_FILENO,"No such command could be found. Check your environment variables\n",65);
-            continue;
+            if(access(tokens[0], F_OK) == 0){
+                strcat(temp,tokens[0]);
+                path=temp;
+            }else{
+                write(STDOUT_FILENO,newargc,strlen(newargc));
+                write(STDOUT_FILENO,": command not found\n",20);
+                continue;
+            }
         }
 
         status=execute(path,inp);
@@ -170,7 +198,4 @@ int main(int argv, char *argc[]){
             write(STDOUT_FILENO,"\n",1);
         }
     }
-
-    free(path);
-
 }
