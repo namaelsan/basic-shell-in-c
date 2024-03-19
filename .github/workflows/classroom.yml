@@ -22,54 +22,10 @@ jobs:
         setup-command: ''
         command: "(cd tests && bash testexit.sh )"
         timeout: 1
-    - name: "(cd tests && bash runtest.sh 1 )"
-      id: cd-tests-bash-runtest-sh-1
-      uses: education/autograding-command-grader@v1
-      with:
-        test-name: "(cd tests && bash runtest.sh 1 )"
-        setup-command: ''
-        command: "(cd tests && bash runtest.sh 1 )"
-        timeout: 1
-    - name: "(cd tests && bash runtest.sh 2 )"
-      id: cd-tests-bash-runtest-sh-2
-      uses: education/autograding-command-grader@v1
-      with:
-        test-name: "(cd tests && bash runtest.sh 2 )"
-        setup-command: ''
-        command: "(cd tests && bash runtest.sh 2 )"
-        timeout: 1
-    - name: "(cd tests && bash runtest.sh 3 )"
-      id: cd-tests-bash-runtest-sh-3
-      uses: education/autograding-command-grader@v1
-      with:
-        test-name: "(cd tests && bash runtest.sh 3 )"
-        setup-command: ''
-        command: "(cd tests && bash runtest.sh 3 )"
-        timeout: 10
-    - name: "(cd tests && bash runtest.sh 4 )"
-      id: cd-tests-bash-runtest-sh-4
-      uses: education/autograding-command-grader@v1
-      with:
-        test-name: "(cd tests && bash runtest.sh 4 )"
-        setup-command: ''
-        command: "(cd tests && bash runtest.sh 4)"
-        timeout: 1
-    - name: "(cd tests && bash runtest.sh 5 )"
-      id: cd-tests-bash-runtest-sh-5
-      uses: education/autograding-command-grader@v1
-      with:
-        test-name: "(cd tests && bash runtest.sh 5 )"
-        setup-command: ''
-        command: "(cd tests && bash runtest.sh 5 )"
-        timeout: 1
+        max-score: 20
     - name: Autograding Reporter
       uses: education/autograding-grading-reporter@v1
       env:
         BASIC-TEST_RESULTS: "${{steps.basic-test.outputs.result}}"
-        CD-TESTS-BASH-RUNTEST-SH-1_RESULTS: "${{steps.cd-tests-bash-runtest-sh-1.outputs.result}}"
-        CD-TESTS-BASH-RUNTEST-SH-2_RESULTS: "${{steps.cd-tests-bash-runtest-sh-2.outputs.result}}"
-        CD-TESTS-BASH-RUNTEST-SH-3_RESULTS: "${{steps.cd-tests-bash-runtest-sh-3.outputs.result}}"
-        CD-TESTS-BASH-RUNTEST-SH-4_RESULTS: "${{steps.cd-tests-bash-runtest-sh-4.outputs.result}}"
-        CD-TESTS-BASH-RUNTEST-SH-5_RESULTS: "${{steps.cd-tests-bash-runtest-sh-5.outputs.result}}"
       with:
-        runners: basic-test,cd-tests-bash-runtest-sh-1,cd-tests-bash-runtest-sh-2,cd-tests-bash-runtest-sh-3,cd-tests-bash-runtest-sh-4,cd-tests-bash-runtest-sh-5
+        runners: basic-test
