@@ -14,18 +14,97 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: basic test
-      id: basic-test
+    - name: "(cd tests && bash testexit.sh )"
+      id: cd-tests-bash-testexit-sh
       uses: education/autograding-command-grader@v1
       with:
-        test-name: basic test
+        test-name: "(cd tests && bash testexit.sh )"
         setup-command: ''
         command: "(cd tests && bash testexit.sh )"
         timeout: 1
-        max-score: 20
+        max-score: 15
+    - name: "(cd tests && bash runtesth.sh 4 )"
+      id: cd-tests-bash-runtesth-sh-4
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: "(cd tests && bash runtesth.sh 4 )"
+        setup-command: ''
+        command: "(cd tests && bash runtesth.sh 4 )"
+        timeout: 1
+        max-score: 9
+    - name: "(cd tests && bash runtesth.sh 2 )"
+      id: cd-tests-bash-runtesth-sh-2
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: "(cd tests && bash runtesth.sh 2 )"
+        setup-command: ''
+        command: "(cd tests && bash runtesth.sh 1 )"
+        timeout: 1
+        max-score: 10
+    - name: "(cd tests && bash runtesth.sh 4 )"
+      id: cd-tests-bash-runtesth-sh-4
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: "(cd tests && bash runtesth.sh 4 )"
+        setup-command: ''
+        command: "(cd tests && bash runtesth.sh 4 )"
+        timeout: 1
+        max-score: 10
+    - name: "(cd tests && bash runtesth.sh 5 )"
+      id: cd-tests-bash-runtesth-sh-5
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: "(cd tests && bash runtesth.sh 5 )"
+        setup-command: ''
+        command: "(cd tests && bash runtesth.sh 5 )"
+        timeout: 1
+        max-score: 10
+    - name: "(cd tests && bash runtesth.sh 6 )"
+      id: cd-tests-bash-runtesth-sh-6
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: "(cd tests && bash runtesth.sh 6 )"
+        setup-command: ''
+        command: "(cd tests && bash runtesth.sh 6 )"
+        timeout: 1
+        max-score: 10
+    - name: "(cd tests && bash runtesth.sh 7 )"
+      id: cd-tests-bash-runtesth-sh-7
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: "(cd tests && bash runtesth.sh 7 )"
+        setup-command: ''
+        command: "(cd tests && bash runtesth.sh 7 )"
+        timeout: 1
+        max-score: 10
+    - name: "(cd tests && bash runtesth.sh 8 )"
+      id: cd-tests-bash-runtesth-sh-8
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: "(cd tests && bash runtesth.sh 8 )"
+        setup-command: ''
+        command: "(cd tests && bash runtesth.sh 8 )"
+        timeout: 1
+        max-score: 10
+    - name: "(cd tests && bash runtesth.sh 9 )"
+      id: cd-tests-bash-runtesth-sh-9
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: "(cd tests && bash runtesth.sh 9 )"
+        setup-command: ''
+        command: "(cd tests && bash runtesth.sh 9 )"
+        timeout: 1
+        max-score: 5
     - name: Autograding Reporter
       uses: education/autograding-grading-reporter@v1
       env:
-        BASIC-TEST_RESULTS: "${{steps.basic-test.outputs.result}}"
+        CD-TESTS-BASH-TESTEXIT-SH_RESULTS: "${{steps.cd-tests-bash-testexit-sh.outputs.result}}"
+        CD-TESTS-BASH-RUNTESTH-SH-4_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-4.outputs.result}}"
+        CD-TESTS-BASH-RUNTESTH-SH-2_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-2.outputs.result}}"
+        CD-TESTS-BASH-RUNTESTH-SH-5_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-5.outputs.result}}"
+        CD-TESTS-BASH-RUNTESTH-SH-6_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-6.outputs.result}}"
+        CD-TESTS-BASH-RUNTESTH-SH-7_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-7.outputs.result}}"
+        CD-TESTS-BASH-RUNTESTH-SH-8_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-8.outputs.result}}"
+        CD-TESTS-BASH-RUNTESTH-SH-9_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-9.outputs.result}}"
       with:
-        runners: basic-test
+        runners: cd-tests-bash-testexit-sh,cd-tests-bash-runtesth-sh-4,cd-tests-bash-runtesth-sh-2,cd-tests-bash-runtesth-sh-4,cd-tests-bash-runtesth-sh-5,cd-tests-bash-runtesth-sh-6,cd-tests-bash-runtesth-sh-7,cd-tests-bash-runtesth-sh-8,cd-tests-bash-runtesth-sh-9
