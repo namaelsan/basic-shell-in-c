@@ -85,7 +85,7 @@ jobs:
         setup-command: ''
         command: "(cd tests && bash runtesth.sh 8 )"
         timeout: 1
-        max-score: 10
+        max-score: 9
     - name: "(cd tests && bash runtesth.sh 9 )"
       id: cd-tests-bash-runtesth-sh-9
       uses: education/autograding-command-grader@v1
