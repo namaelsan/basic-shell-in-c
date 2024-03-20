@@ -4,7 +4,10 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <sys/time.h>
+#include <fcntl.h>
 #include <math.h>
+#include <time.h>
 #define true 1
 #define false 0
 
@@ -139,6 +142,8 @@ int execute(char *path,char **inp){
 }
 
 
+
+
 /* COMMENT */
 int main(int argv, char *argc[]){
     
@@ -150,6 +155,14 @@ int main(int argv, char *argc[]){
     char *returnd=NULL;
     char temp[256]="./";
     temp[2]=0;
+    
+    // dosyayı okuma modu ile açar dosya yoksa oluşturur
+    int fd = open("log.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+    if(fd == -1)
+       errorprint("there was a problem with opening file");
+    
+    
 
     while(true){
 
@@ -159,6 +172,19 @@ int main(int argv, char *argc[]){
 
         write(1,"$",1);
         read(0,newargc,256);
+        
+        // gettimeofday() ile komutun alındığı zaman log.txt dosyasına yazdırılır
+        struct timeval tv; 
+       gettimeofday(&tv,NULL); 
+       char time[30];       
+       strftime(time,sizeof(time),"%Y-%m-%d %H:%M:%S\t", localtime(&tv.tv_sec));
+       write(fd,time,sizeof(time));
+        
+       write(fd, newargc, strlen(newargc));
+        
+        
+    
+        
         inp=split(newargc,(char **)tokens);
         path=where(inp[0],256);
 
@@ -173,6 +199,7 @@ int main(int argv, char *argc[]){
                 }
                 free(tokens);
                 free(newargc);
+                close(fd);
                 exit(0);
             }
             continue;
