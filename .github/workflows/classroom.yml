@@ -14,11 +14,11 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: "(cd tests && bash testexit.sh )"
-      id: cd-tests-bash-testexit-sh
+    - name: simple exit test
+      id: simple-exit-test
       uses: education/autograding-command-grader@v1
       with:
-        test-name: "(cd tests && bash testexit.sh )"
+        test-name: simple exit test
         setup-command: ''
         command: "(cd tests && bash testexit.sh )"
         timeout: 1
@@ -26,6 +26,6 @@ jobs:
     - name: Autograding Reporter
       uses: education/autograding-grading-reporter@v1
       env:
-        CD-TESTS-BASH-TESTEXIT-SH_RESULTS: "${{steps.cd-tests-bash-testexit-sh.outputs.result}}"
+        SIMPLE-EXIT-TEST_RESULTS: "${{steps.simple-exit-test.outputs.result}}"
       with:
-        runners: cd-tests-bash-testexit-sh
+        runners: simple-exit-test
