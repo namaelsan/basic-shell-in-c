@@ -23,9 +23,19 @@ jobs:
         command: "(cd tests && bash testexit.sh )"
         timeout: 1
         max-score: 15
+    - name: runtest.sh 1
+      id: runtest-sh-1
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: runtest.sh 1
+        setup-command: ''
+        command: "(cd tests && ./runtest.sh 1"
+        timeout: 1
+        max-score: 10
     - name: Autograding Reporter
       uses: education/autograding-grading-reporter@v1
       env:
         CD-TESTS-BASH-TESTEXIT-SH_RESULTS: "${{steps.cd-tests-bash-testexit-sh.outputs.result}}"
+        RUNTEST-SH-1_RESULTS: "${{steps.runtest-sh-1.outputs.result}}"
       with:
-        runners: cd-tests-bash-testexit-sh
+        runners: cd-tests-bash-testexit-sh,runtest-sh-1
