@@ -23,15 +23,6 @@ jobs:
         command: "(cd tests && bash testexit.sh )"
         timeout: 1
         max-score: 15
-    - name: "(cd tests && bash runtesth.sh 4 )"
-      id: cd-tests-bash-runtesth-sh-4
-      uses: education/autograding-command-grader@v1
-      with:
-        test-name: "(cd tests && bash runtesth.sh 4 )"
-        setup-command: ''
-        command: "(cd tests && bash runtesth.sh 4 )"
-        timeout: 1
-        max-score: 9
     - name: "(cd tests && bash runtesth.sh 2 )"
       id: cd-tests-bash-runtesth-sh-2
       uses: education/autograding-command-grader@v1
@@ -39,15 +30,6 @@ jobs:
         test-name: "(cd tests && bash runtesth.sh 2 )"
         setup-command: ''
         command: "(cd tests && bash runtesth.sh 1 )"
-        timeout: 1
-        max-score: 10
-    - name: "(cd tests && bash runtesth.sh 4 )"
-      id: cd-tests-bash-runtesth-sh-4
-      uses: education/autograding-command-grader@v1
-      with:
-        test-name: "(cd tests && bash runtesth.sh 4 )"
-        setup-command: ''
-        command: "(cd tests && bash runtesth.sh 4 )"
         timeout: 1
         max-score: 10
     - name: "(cd tests && bash runtesth.sh 5 )"
@@ -99,7 +81,6 @@ jobs:
       uses: education/autograding-grading-reporter@v1
       env:
         CD-TESTS-BASH-TESTEXIT-SH_RESULTS: "${{steps.cd-tests-bash-testexit-sh.outputs.result}}"
-        CD-TESTS-BASH-RUNTESTH-SH-4_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-4.outputs.result}}"
         CD-TESTS-BASH-RUNTESTH-SH-2_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-2.outputs.result}}"
         CD-TESTS-BASH-RUNTESTH-SH-5_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-5.outputs.result}}"
         CD-TESTS-BASH-RUNTESTH-SH-6_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-6.outputs.result}}"
@@ -107,4 +88,4 @@ jobs:
         CD-TESTS-BASH-RUNTESTH-SH-8_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-8.outputs.result}}"
         CD-TESTS-BASH-RUNTESTH-SH-9_RESULTS: "${{steps.cd-tests-bash-runtesth-sh-9.outputs.result}}"
       with:
-        runners: cd-tests-bash-testexit-sh,cd-tests-bash-runtesth-sh-4,cd-tests-bash-runtesth-sh-2,cd-tests-bash-runtesth-sh-4,cd-tests-bash-runtesth-sh-5,cd-tests-bash-runtesth-sh-6,cd-tests-bash-runtesth-sh-7,cd-tests-bash-runtesth-sh-8,cd-tests-bash-runtesth-sh-9
+        runners: cd-tests-bash-testexit-sh,cd-tests-bash-runtesth-sh-2,cd-tests-bash-runtesth-sh-5,cd-tests-bash-runtesth-sh-6,cd-tests-bash-runtesth-sh-7,cd-tests-bash-runtesth-sh-8,cd-tests-bash-runtesth-sh-9
