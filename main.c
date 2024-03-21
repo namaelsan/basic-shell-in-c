@@ -14,6 +14,7 @@ https://stackoverflow.com/questions/8257714/how-can-i-convert-an-int-to-a-string
 https://stackoverflow.com/questions/7292642/grabbing-output-from-exec
 
 
+
  */
 
 
@@ -159,6 +160,11 @@ int main(int argv, char *argc[]){
 
         write(1,"$",1);
         read(0,newargc,256);
+
+        if (newargc[0] =='\n'){
+            continue;
+        }
+
         inp=split(newargc,(char **)tokens);
         path=where(inp[0],256);
 
