@@ -14,18 +14,18 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: basic test
-      id: basic-test
+    - name: simple exit test
+      id: simple-exit-test
       uses: education/autograding-command-grader@v1
       with:
-        test-name: basic test
-        setup-command: cd tests
-        command: bash testexit.sh
+        test-name: simple exit test
+        setup-command: ''
+        command: "(cd tests && bash testexit.sh )"
         timeout: 1
-        max-score: 20
+        max-score: 15
     - name: Autograding Reporter
       uses: education/autograding-grading-reporter@v1
       env:
-        BASIC-TEST_RESULTS: "${{steps.basic-test.outputs.result}}"
+        SIMPLE-EXIT-TEST_RESULTS: "${{steps.simple-exit-test.outputs.result}}"
       with:
-        runners: basic-test
+        runners: simple-exit-test
