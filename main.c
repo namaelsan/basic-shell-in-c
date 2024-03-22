@@ -143,19 +143,37 @@ int execute(char *path,char **inp){
     }
 }
 
+char *trim(char *str){
+    int len=strlen(str);
+
+    for(int i=0;i<len;i++){
+        if(str[i]==' '){
+            if(str[i+1]=='\n'){
+                str[i+1]=0;
+                str[i]='\n';
+                return &str[i];
+            }
+        }
+        else{
+            return &str[i];
+        }
+    }
+}
+
 
 
 
 /* ana fonksiyon */
-int main(int argc, char *argv[]){
+int main(){
     
-    char *newargv=malloc(sizeof(char)*256);
+    char *argv=malloc(sizeof(char)*256);
     int status,statuinfo;
     char **inp;
     char **tokens=malloc(sizeof(char *)*256);
     char *path;
     char *returnd=NULL;
     char *header=malloc(sizeof(char)*256);
+    char *newargv;
 
     
     // dosyayı okuma modu ile açar dosya yoksa oluşturur
@@ -173,14 +191,15 @@ int main(int argc, char *argv[]){
         memset(header+2,0,253);
 
         /* inputu alan değişken sıfırlanır */
-        memset(newargv,0,256);
+        memset(argv,0,256);
 
         /* input alınır */
         write(1,"$",1);
-        read(0,newargv,256);
+        read(0,argv,256);
+        newargv=trim(argv);
 
         /* boş string girildiyse işlem yapılmaz */
-        if (newargv[0] =='\n' || newargv[0] ==' '){
+        if (newargv[0] =='\n'){
             continue;
         }
 
@@ -206,7 +225,7 @@ int main(int argc, char *argv[]){
                 }
                 free(header);
                 free(tokens);
-                free(newargv);
+                free(argv);
                 close(fd);
                 exit(0);
             }
