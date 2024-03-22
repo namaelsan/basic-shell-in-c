@@ -12,14 +12,11 @@
 #define false 0
 
 /* 
+
 Alıntı Yapılan Yerler:
 https://stackoverflow.com/questions/8257714/how-can-i-convert-an-int-to-a-string-in-c
-https://stackoverflow.com/questions/7292642/grabbing-output-from-exec
 
-
-
-
- */
+*/
 
 
 
@@ -31,7 +28,7 @@ int errorprint(char *str){
     exit(1);
 }
 
-/* COMMENT */
+/* string içindeki ilk \n in konumunu bulur ve döndürür */
 int find_nextline(char *str, int len){
     for (int i=0; i<len; i++){
         if(str[i]== '\n'){
@@ -41,8 +38,7 @@ int find_nextline(char *str, int len){
     return -1;
 }
 
-/* COMMENT */
-/* bu fonksiyonda stackoverflowdan alıntı yaptım. sayfanın linki dosyanın tepesindeki yorum */
+/*  */  
 char *where(char *argc,int len){
 
 
@@ -62,7 +58,7 @@ char *where(char *argc,int len){
         close(link[0]);
         close(link[1]);
         execlp("/usr/bin/which", "which", argc, NULL);
-        exit(0);
+        exit(1);
 
     } else {
         close(link[1]);
@@ -129,7 +125,7 @@ char **split(char *str, char *tokens[]) {
     return tokens;
 }
 
-/* COMMENT */
+/* verilen değişkenler child process içinde çalıştırılır ve status döndürür */
 int execute(char *path,char **inp){
     int status;
 
@@ -150,7 +146,7 @@ int execute(char *path,char **inp){
 
 
 
-/* COMMENT */
+/* ana fonksiyon */
 int main(int argc, char *argv[]){
     
     char *newargv=malloc(sizeof(char)*256);
@@ -159,8 +155,8 @@ int main(int argc, char *argv[]){
     char **tokens=malloc(sizeof(char *)*256);
     char *path;
     char *returnd=NULL;
-    char temp[3]="./";
-    temp[2]=0;
+    char *header=malloc(sizeof(char)*256);
+
     
     // dosyayı okuma modu ile açar dosya yoksa oluşturur
     int fd = open("log.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -172,37 +168,32 @@ int main(int argc, char *argv[]){
 
     while(true){
 
-        for(int i=0;i<256;i++){
-            newargv[i]=0;
-        }
+        /* which'le konumu bulunamayan dosyayı çalıştırırken kullanılan header sıfırlanır */
+        header[0]='.';header[1]='/';
+        memset(header+2,0,253);
 
+        /* inputu alan değişken sıfırlanır */
+        memset(newargv,0,256);
+
+        /* input alınır */
         write(1,"$",1);
         read(0,newargv,256);
 
-        if (newargv[0] =='\n'){
+        /* boş string girildiyse işlem yapılmaz */
+        if (newargv[0] =='\n' || newargv[0]== 0){
             continue;
         }
 
-        
-        // gettimeofday() ile komutun alındığı zaman log.txt dosyasına yazdırılır
+        /* gettimeofday() ile komutun alındığı zaman log.txt dosyasına yazdırılır */
         struct timeval tv; 
         gettimeofday(&tv,NULL); 
         char time[30];       
         strftime(time,sizeof(time),"%Y-%m-%d %H:%M:%S\t", localtime(&tv.tv_sec));
-        write(fd,time,strlen(time));
-            
+        write(fd,time,strlen(time));            
         write(fd, newargv, strlen(newargv));
-        
-        
-    
-        
-        inp=split(newargv,(char **)tokens);
 
-        // for(int i=0;inp[i];i++){
-        //     printf("-%s-\n",inp[i]);
-        // }
-
-        path=where(inp[0],256);
+        inp=split(newargv,(char **)tokens); /* input stringi tokenlere ayrılır */
+        path=where(inp[0],256); /* programın konumu bulunur */
 
         /* input exit için kontrol edilir */
         if(!strcmp(inp[0],"exit")){
@@ -213,6 +204,7 @@ int main(int argc, char *argv[]){
                 if(path){
                     free(path);
                 }
+                free(header);
                 free(tokens);
                 free(newargv);
                 close(fd);
@@ -221,16 +213,21 @@ int main(int argc, char *argv[]){
             continue;
         }
 
+        /* dosyanın bulunmadığı durumda ya hata verilir yada klasördeyse ilk argümanın başına ./ koyulur */
         if(!path){
             if(access(tokens[0], F_OK) == 0){
-                strcat(temp,tokens[0]);
-                path=temp;
+                strcat(header,tokens[0]);
+                path=header;
             }else{
                 write(STDOUT_FILENO,newargv,strlen(newargv));
                 write(STDOUT_FILENO,": command not found\n",20);
                 continue;
             }
         }
+
+        // for(int i=0;inp[i];i++){
+        //     printf("-%s-\n",inp[i]);
+        // }
 
         /* uygulama hata vererek kapandıysa hata kodunu printle */
         statuinfo=execute(path,inp);
