@@ -180,7 +180,7 @@ int main(int argc, char *argv[]){
         read(0,newargv,256);
 
         /* boş string girildiyse işlem yapılmaz */
-        if (newargv[0] =='\n' || newargv[0]== 0){
+        if (newargv[0] =='\n' || newargv[0] ==' '){
             continue;
         }
 
