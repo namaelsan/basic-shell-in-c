@@ -9,23 +9,106 @@ permissions:
   contents: read
 jobs:
   run-autograding-tests:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     if: github.actor != 'github-classroom[bot]'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: simple exit test
-      id: simple-exit-test
+    - name: runtest.sh 1
+      id: runtest-sh-1
       uses: education/autograding-command-grader@v1
       with:
-        test-name: simple exit test
+        test-name: runtest.sh 1
+        setup-command: ''
+        command: "(cd tests && bash runtest.sh 1 )"
+        timeout: 2
+        max-score: 10
+    - name: runtest.sh 2
+      id: runtest-sh-2
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: runtest.sh 2
+        setup-command: ''
+        command: "(cd tests && bash runtest.sh 2 )"
+        timeout: 2
+        max-score: 10
+    - name: runtest.sh 3
+      id: runtest-sh-3
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: runtest.sh 3
         setup-command: ''
         command: "(cd tests && bash testexit.sh )"
+        timeout: 2
+        max-score: 15
+    - name: runtest.sh 4
+      id: runtest-sh-4
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: runtest.sh 4
+        setup-command: ''
+        command: "(cd tests && bash runtest.sh 4 )"
+        timeout: 2
+        max-score: 10
+    - name: runtest.sh 5
+      id: runtest-sh-5
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: runtest.sh 5
+        setup-command: ''
+        command: "(cd tests && bash runtest.sh 5 )"
+        timeout: 2
+        max-score: 10
+    - name: runtest.sh 6
+      id: runtest-sh-6
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: runtest.sh 6
+        setup-command: ''
+        command: "(cd tests && bash runtest.sh 6 )"
+        timeout: 2
+        max-score: 10
+    - name: runtest.sh 7
+      id: runtest-sh-7
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: runtest.sh 7
+        setup-command: ''
+        command: "(cd tests && bash runtest.sh 7 )"
+        timeout: 2
+        max-score: 10
+    - name: runtest.sh 9
+      id: runtest-sh-9
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: runtest.sh 9
+        setup-command: ''
+        command: "(cd tests && bash runtest.sh 9 )"
+        timeout: 2
+        max-score: 10
+    - name: test log.txt 10
+      id: testlog
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: testlog
+        setup-command: ''
+        command: "(cd tests && bash testlog.sh )"
         timeout: 1
         max-score: 15
     - name: Autograding Reporter
       uses: education/autograding-grading-reporter@v1
       env:
-        SIMPLE-EXIT-TEST_RESULTS: "${{steps.simple-exit-test.outputs.result}}"
+        RUNTEST-SH-1_RESULTS: "${{steps.runtest-sh-1.outputs.result}}"
+        RUNTEST-SH-2_RESULTS: "${{steps.runtest-sh-2.outputs.result}}"
+        RUNTEST-SH-3_RESULTS: "${{steps.runtest-sh-3.outputs.result}}"
+        RUNTEST-SH-4_RESULTS: "${{steps.runtest-sh-4.outputs.result}}"
+        RUNTEST-SH-5_RESULTS: "${{steps.runtest-sh-5.outputs.result}}"
+        RUNTEST-SH-6_RESULTS: "${{steps.runtest-sh-6.outputs.result}}"
+        RUNTEST-SH-7_RESULTS: "${{steps.runtest-sh-7.outputs.result}}"
+        RUNTEST-SH-9_RESULTS: "${{steps.runtest-sh-9.outputs.result}}"
+        TESTLOG_RESULTS: "${{steps.testlog.outputs.result}}"
+        
       with:
-        runners: simple-exit-test
+        runners: runtest-sh-1,runtest-sh-2,runtest-sh-3,
+                runtest-sh-4,runtest-sh-5,runtest-sh-6,runtest-sh-7,
+                runtest-sh-9,testlog
