@@ -182,12 +182,12 @@ int main(int argv, char *argc[]){
         
         // gettimeofday() ile komutun alındığı zaman log.txt dosyasına yazdırılır
         struct timeval tv; 
-       gettimeofday(&tv,NULL); 
-       char time[30];       
-       strftime(time,sizeof(time),"%Y-%m-%d %H:%M:%S\t", localtime(&tv.tv_sec));
-       write(fd,time,strlen(time));
-        
-       write(fd, newargc, strlen(newargc));
+        gettimeofday(&tv,NULL); 
+        char time[30];       
+        strftime(time,sizeof(time),"%Y-%m-%d %H:%M:%S\t", localtime(&tv.tv_sec));
+        write(fd,time,strlen(time));
+            
+        write(fd, newargc, strlen(newargc));
         
         
     
