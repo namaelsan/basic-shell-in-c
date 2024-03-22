@@ -120,7 +120,11 @@ char **split(char *str, char *tokens[]) {
         i++;
     }
 
-    tokens[i] = NULL;
+    tokens[i++] = NULL;
+
+    for(;i<256;i++){
+        tokens[i]=NULL;
+    }
 
     return tokens;
 }
@@ -147,15 +151,15 @@ int execute(char *path,char **inp){
 
 
 /* COMMENT */
-int main(int argv, char *argc[]){
+int main(int argc, char *argv[]){
     
-    char *newargc=malloc(sizeof(char)*256);
+    char *newargv=malloc(sizeof(char)*256);
     int status,statuinfo;
     char **inp;
-    char **tokens=malloc(sizeof(char)*256*256);
+    char **tokens=malloc(sizeof(char *)*256);
     char *path;
     char *returnd=NULL;
-    char temp[256]="./";
+    char temp[3]="./";
     temp[2]=0;
     
     // dosyayı okuma modu ile açar dosya yoksa oluşturur
@@ -169,13 +173,13 @@ int main(int argv, char *argc[]){
     while(true){
 
         for(int i=0;i<256;i++){
-            newargc[i]=0;
+            newargv[i]=0;
         }
 
         write(1,"$",1);
-        read(0,newargc,256);
+        read(0,newargv,256);
 
-        if (newargc[0] =='\n'){
+        if (newargv[0] =='\n'){
             continue;
         }
 
@@ -187,12 +191,17 @@ int main(int argv, char *argc[]){
         strftime(time,sizeof(time),"%Y-%m-%d %H:%M:%S\t", localtime(&tv.tv_sec));
         write(fd,time,strlen(time));
             
-        write(fd, newargc, strlen(newargc));
+        write(fd, newargv, strlen(newargv));
         
         
     
         
-        inp=split(newargc,(char **)tokens);
+        inp=split(newargv,(char **)tokens);
+
+        // for(int i=0;inp[i];i++){
+        //     printf("-%s-\n",inp[i]);
+        // }
+
         path=where(inp[0],256);
 
         /* input exit için kontrol edilir */
@@ -205,7 +214,7 @@ int main(int argv, char *argc[]){
                     free(path);
                 }
                 free(tokens);
-                free(newargc);
+                free(newargv);
                 close(fd);
                 exit(0);
             }
@@ -217,7 +226,7 @@ int main(int argv, char *argc[]){
                 strcat(temp,tokens[0]);
                 path=temp;
             }else{
-                write(STDOUT_FILENO,newargc,strlen(newargc));
+                write(STDOUT_FILENO,newargv,strlen(newargv));
                 write(STDOUT_FILENO,": command not found\n",20);
                 continue;
             }
