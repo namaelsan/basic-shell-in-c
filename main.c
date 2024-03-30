@@ -1,3 +1,13 @@
+/*
+Enhar Apuhan 22120205012
+Mervenur Saraç 22120205055
+2024-03-30
+
+Program system call'lari kullanarak kullanicidan alinan komutlar calistirilir.which ile komutun hangi dizide bulundugu belirlenir.fork ve execvp cagrilari ile 
+yeni process olusturulur ve komutlar islenir.Girilen inputlar ve outputlar lox.txt isimli dosyaya yazdirilir.
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,6 +26,10 @@
 Alıntı Yapılan Yerler:
 https://stackoverflow.com/questions/8257714/how-can-i-convert-an-int-to-a-string-in-c
 
+*/
+
+/*
+split fonksiyonu yazılırken chatGPT'den yardım alınmıştır
 */
 
 
@@ -38,7 +52,7 @@ int find_nextline(char *str, int len){
     return -1;
 }
 
-/*  */  
+/* kullanıcıdan alınan komutun hangi dizinde olduğunu belirler ve döndürür */  
 char *where(char *argc,int len){
 
 
@@ -142,7 +156,7 @@ int execute(char *path,char **inp){
         return status;
     }
 }
-
+/*  */
 char *trim(char *str){
     int len=strlen(str);
 
