@@ -1,7 +1,6 @@
-/*
+/* 30/03/2024
 Enhar Apuhan 22120205012
 Mervenur Saraç 22120205055
-2024-03-30
 
 Program system call'lari kullanarak kullanicidan alinan komutlar calistirilir.which ile komutun hangi dizide bulundugu belirlenir.fork ve execvp cagrilari ile 
 yeni process olusturulur ve komutlar islenir.Girilen inputlar ve outputlar lox.txt isimli dosyaya yazdirilir.
@@ -57,37 +56,37 @@ char *where(char *argc,int len){
 
 
     char buffer[256]={0};
-    int link[2];
+    int link;
     argc[find_nextline(argc,len)]=0;
 
-    if(pipe(link)== -1)
-        errorprint("There was a problem with pipe");
-    
+    link=open("temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
     pid_t pid = fork();
     if(pid == -1)
         errorprint("There was a problem with fork");    
 
     if (pid == 0) {
-        dup2 (link[1], STDOUT_FILENO);
-        close(link[0]);
-        close(link[1]);
+        dup2(link,1);
         execlp("/usr/bin/which", "which", argc, NULL);
         exit(1);
 
     } else {
-        close(link[1]);
-        read(link[0], buffer, sizeof(buffer));
+        wait(NULL);
+        close(link);
+        link=open("temp.txt", O_RDONLY);
+        read(link, buffer, sizeof(buffer));
 
         int nextln=find_nextline(buffer,256);
         char *path=malloc(nextln + 1);
         strcpy(path,buffer);
         path[nextln]=0;
 
-        wait(NULL);
-
+        close(link);
+        unlink("temp.txt");
         if(path[0]==0){
             return NULL;
         }
+
 
         return path;
     }
