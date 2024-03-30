@@ -29,7 +29,7 @@ https://stackoverflow.com/questions/8257714/how-can-i-convert-an-int-to-a-string
 */
 
 /*
-split fonksiyonu yazılırken chatGPT'den yardım alınmıştır
+split fonksiyonu yazılırken chatGPT'den yardım alınmıştır.
 */
 
 
@@ -258,9 +258,6 @@ int main(){
             }
         }
 
-        // for(int i=0;inp[i];i++){
-        //     printf("-%s-\n",inp[i]);
-        // }
 
         /* uygulama hata vererek kapandıysa hata kodunu printle */
         statuinfo=execute(path,inp);
