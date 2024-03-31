@@ -2,8 +2,8 @@
 Enhar Apuhan 22120205012
 Mervenur Saraç 22120205055
 
-Program system call'lari kullanarak kullanicidan alinan komutlar calistirilir.which ile komutun hangi dizide bulundugu belirlenir.fork ve execvp cagrilari ile 
-yeni process olusturulur ve komutlar islenir.Girilen inputlar ve outputlar lox.txt isimli dosyaya yazdirilir.
+Program system call'lari kullanarak kullanicidan alinan komutlar calistirilir.which ile komutun hangi dizide bulundugu belirlenir. 
+fork ve execvp cagrilari ile yeni process olusturulur ve komutlar islenir. Alınan inputlar log.txt isimli dosyaya yazdirilir.
 */
 
 
@@ -57,7 +57,7 @@ char *where(char *argc,int len){
 
     char buffer[256]={0};
     int link;
-    argc[find_nextline(argc,len)]=0;
+    argc[find_nextline(argc,len)]=0;/* \n bulunup \0 a dönüştürülür */
 
     link=open("temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
@@ -65,12 +65,13 @@ char *where(char *argc,int len){
     if(pid == -1)
         errorprint("There was a problem with fork");    
 
-    if (pid == 0) {
+    /* which komutunun outputu file descriptoru link'e yazılan dosyaya yazılır */
+    if(pid == 0){
         dup2(link,1);
         execlp("/usr/bin/which", "which", argc, NULL);
         exit(1);
 
-    } else {
+    }else{
         wait(NULL);
         close(link);
         link=open("temp.txt", O_RDONLY);
